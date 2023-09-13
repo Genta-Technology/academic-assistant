@@ -1,6 +1,5 @@
 import weaviate
 import json
-import requests
 
 from tqdm import tqdm
 
@@ -53,9 +52,9 @@ client.schema.create(
     }
 )
 
-def main():
+def main(data_path: str = './data/ml-arxiv-embeddings.json'):
     # read data json file from ./data/ml-arxiv-embeddings.json
-    with open('./data/ml-arxiv-embeddings.json') as f:
+    with open(data_path) as f:
         data = json.load(f)
 
     client.batch.configure(100)
