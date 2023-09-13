@@ -13,45 +13,48 @@ client = weaviate.Client(
     }
 )
 
-# Create schema
-client.schema.create(
-    {
-        'classes': [
-            {
-                'class': 'Paper',
-                'description': 'A research paper',
-                "vectorizer": "text2vec-openai",
-                'properties': [
-                    {
-                        'name': 'DOI',
-                        'description': 'ID of the paper',
-                        'dataType': ['string'],
-                    },
-                    {
-                        'name': 'title',
-                        'description': 'Title of the paper',
-                        'dataType': ['string']
-                    },
-                    {
-                        'name': 'authors',
-                        'description': 'Authors of the paper',
-                        'dataType': ['string']
-                    },
-                    {
-                        'name': 'abstract',
-                        'description': 'Abstract of the paper',
-                        'dataType': ['string']
-                    },
-                    {
-                        'name': 'date',
-                        'description': 'Date of the paper',
-                        'dataType': ['string']
-                    },
-                ]
-            }
-        ]
-    }
-)
+try:
+    # Create schema
+    client.schema.create(
+        {
+            'classes': [
+                {
+                    'class': 'Paper',
+                    'description': 'A research paper',
+                    "vectorizer": "text2vec-openai",
+                    'properties': [
+                        {
+                            'name': 'DOI',
+                            'description': 'ID of the paper',
+                            'dataType': ['string'],
+                        },
+                        {
+                            'name': 'title',
+                            'description': 'Title of the paper',
+                            'dataType': ['string']
+                        },
+                        {
+                            'name': 'authors',
+                            'description': 'Authors of the paper',
+                            'dataType': ['string']
+                        },
+                        {
+                            'name': 'abstract',
+                            'description': 'Abstract of the paper',
+                            'dataType': ['string']
+                        },
+                        {
+                            'name': 'date',
+                            'description': 'Date of the paper',
+                            'dataType': ['string']
+                        },
+                    ]
+                }
+            ]
+        }
+    )
+except:
+    pass
 
 def main(data_path: str = './data/ml-arxiv-embeddings.json'):
     # read data json file from ./data/ml-arxiv-embeddings.json
