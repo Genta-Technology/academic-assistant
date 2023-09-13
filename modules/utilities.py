@@ -42,3 +42,5 @@ class EnvironmentVariables:
         """
 
         return self.get(key)
+    
+env = EnvironmentVariables()
