@@ -20,6 +20,7 @@ client.schema.create(
             {
                 'class': 'Paper',
                 'description': 'A research paper',
+                "vectorizer": "text2vec-openai",
                 'properties': [
                     {
                         'name': 'DOI',
