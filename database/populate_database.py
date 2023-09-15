@@ -82,5 +82,5 @@ def main(data_path: str = './data/ml-arxiv-embeddings.json'):
                     'date': sample['root']['update_date'],
                 },
                 class_name='Paper',
-                vector=sample['embedding']
+                vector=sample["root"]['embedding']
             )
