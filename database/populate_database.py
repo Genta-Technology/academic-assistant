@@ -1,5 +1,9 @@
-import weaviate
+"""
+Populate the database with the data from the json file.
+"""
+
 import json
+import weaviate
 
 from tqdm import tqdm
 
@@ -13,7 +17,8 @@ client = weaviate.Client(
     }
 )
 
-try:
+# Check if schema exists
+if not client.schema.contains():
     # Create schema
     client.schema.create(
         {
@@ -21,7 +26,6 @@ try:
                 {
                     'class': 'Paper',
                     'description': 'A research paper',
-                    "vectorizer": "text2vec-openai",
                     'properties': [
                         {
                             'name': 'DOI',
@@ -53,25 +57,30 @@ try:
             ]
         }
     )
-except:
-    pass
 
 def main(data_path: str = './data/ml-arxiv-embeddings.json'):
+    """
+    Populate the database with data.
+
+    Args:
+        data_path (str): Path to the data file.
+    """
+
     # read data json file from ./data/ml-arxiv-embeddings.json
-    with open(data_path) as f:
-        data = json.load(f)
+    with open(data_path, encoding='utf-8') as file:
+        data = json.load(file)
 
     client.batch.configure(100)
     with client.batch as batch:
-        for i, d in enumerate(tqdm(data)):
+        for sample in tqdm(data):
             batch.add_data_object(
                 data_object={
-                    'DOI': d['id'],
-                    'title': d['title'],
-                    'authors': d['authors'],
-                    'abstract': d['abstract'],
-                    'date': d['update_date'],
+                    'DOI': sample['root']['id'],
+                    'title': sample['root']['title'],
+                    'authors': sample['root']['authors'],
+                    'abstract': sample['root']['abstract'],
+                    'date': sample['root']['update_date'],
                 },
                 class_name='Paper',
-                vector=d['embedding']
+                vector=sample['embedding']
             )

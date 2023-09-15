@@ -1,3 +1,7 @@
+"""
+Contains utility functions.
+"""
+
 import os
 
 from dotenv import load_dotenv, find_dotenv
@@ -13,9 +17,9 @@ class EnvironmentVariables:
         """
 
         # Load environment variables from .env file
-        self.ENV_FILE = find_dotenv()
-        if self.ENV_FILE:
-            load_dotenv(self.ENV_FILE)
+        self.env_file = find_dotenv()
+        if self.env_file:
+            load_dotenv(self.env_file)
 
     def get(self, key: str) -> str:
         """
@@ -29,7 +33,7 @@ class EnvironmentVariables:
         """
 
         return os.environ.get(key)
-    
+
     def __call__(self, key: str) -> str:
         """
         Get an environment variable.
@@ -42,5 +46,5 @@ class EnvironmentVariables:
         """
 
         return self.get(key)
-    
+
 env = EnvironmentVariables()
