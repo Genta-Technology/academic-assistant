@@ -30,4 +30,5 @@ if prompt := st.chat_input("Wassup"):
     with st.chat_message("assistant"):
         st.markdown(response)
 
-    st.session_state.messages.append({"role": "assistant", "content": response})
+    st.session_state.messages.append(
+        {"role": "assistant", "content": response})
