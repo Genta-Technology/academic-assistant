@@ -28,6 +28,8 @@ if st.session_state.token:
         with st.chat_message("assistant"):
             st.markdown(response)
 
-        st.session_state.messages.append({"role": "assistant", "content": response})
+        st.session_state.messages.append(
+            {"role": "assistant", "content": response})
 else:
-    st.write("Please enter your OpenAI API TOKEN first in the sidebar to use this application")
+    st.write(
+        "Please enter your OpenAI API TOKEN first in the sidebar to use this application")
