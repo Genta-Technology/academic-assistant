@@ -1,3 +1,7 @@
+"""
+A collection of utility functions.
+"""
+
 import os
 import openai
 import weaviate
