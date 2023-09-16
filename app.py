@@ -4,10 +4,25 @@ FILE is for UI
 
 import streamlit as st
 
-st.title("GENTA")
+from modules.utilities import validate_openai_api_key
+
+st.title("GENTA - Academic Assitant")
+st.write("Genta Acadmic Assistant is a tool to help you find the right research paper for your research.")
+
+def on_token_change():
+    """
+    Callback for token change.
+
+    Returns:
+        None.
+    """
+
+    if not validate_openai_api_key(st.session_state.token):
+        st.error("Invalid OpenAI API Key")
+        del st.session_state.token
 
 with st.sidebar:
-    st.text_input("Please enter token", placeholder="Token", key="token")
+    st.text_input("Please enter token", placeholder="Token", key="token", on_change=on_token_change)
 
 if "messages" not in st.session_state:
     st.session_state.messages = []
