@@ -3,10 +3,10 @@ A collection of utility functions.
 """
 
 import os
+
 import openai
 import weaviate
-
-from dotenv import load_dotenv, find_dotenv
+from dotenv import find_dotenv, load_dotenv
 
 
 def open_ai_embeddings(input_str: str, api_token: str):
