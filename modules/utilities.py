@@ -13,11 +13,13 @@ def open_ai_embeddings(input_str: str, api_token: str):
     """Get the OpenAI embeddings for a given input string.
 
     :param input_str: Input string.
-    :type input_str: str
+    :type input_str: str: str
     :param api_token: OpenAI API token.
     :type api_token: str
     :param input_str: str:
     :param api_token: str:
+    :param input_str: str: 
+    :param api_token: str: 
     :returns: List of embeddings.
     :rtype: list
 
@@ -40,7 +42,7 @@ def get_abstract(
     """Get the abstract of the top n papers similar to the input string.
 
     :param input_str: Input string.
-    :type input_str: str
+    :type input_str: str: str
     :param weaviate_url: Weaviate URL.
     :type weaviate_url: str
     :param openai_api_token: OpenAI API token.
@@ -50,6 +52,10 @@ def get_abstract(
     :param input_str: str:
     :param weaviate_url: str:
     :param openai_api_token: str:
+    :param top_n: int:  (Default value = 5)
+    :param input_str: str: 
+    :param weaviate_url: str: 
+    :param openai_api_token: str: 
     :param top_n: int:  (Default value = 5)
     :returns: List of papers.
     :rtype: list
@@ -71,9 +77,7 @@ def get_abstract(
 
 
 class EnvironmentVariables:
-    """
-    This class is used to load environment variables from a .env file.
-    """
+    """This class is used to load environment variables from a .env file."""
 
     def __init__(self):
         """
@@ -86,14 +90,14 @@ class EnvironmentVariables:
             load_dotenv(self.env_file)
 
     def get(self, key: str) -> str:
-        """
-        Get an environment variable.
+        """Get an environment variable.
 
-        Args:
-            key (str): Environment variable key.
+        :param key: Environment variable key.
+        :type key: str
+        :param key: str: 
+        :returns: Environment variable value.
+        :rtype: str
 
-        Returns:
-            str: Environment variable value.
         """
 
         return os.environ.get(key)
