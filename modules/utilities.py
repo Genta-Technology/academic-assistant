@@ -7,15 +7,17 @@ import weaviate
 
 
 def open_ai_embeddings(input_str: str, api_token: str):
-    """
-    Get the OpenAI embeddings for a given input string.
+    """Get the OpenAI embeddings for a given input string.
 
-    Args:
-        input_str (str): Input string.
-        api_token (str): OpenAI API token.
+    :param input_str: Input string.
+    :type input_str: str
+    :param api_token: OpenAI API token.
+    :type api_token: str
+    :param input_str: str: 
+    :param api_token: str: 
+    :returns: List of embeddings.
+    :rtype: list
 
-    Returns:
-        list: List of embeddings.
     """
 
     # use the api token
@@ -32,17 +34,23 @@ def open_ai_embeddings(input_str: str, api_token: str):
 def get_abstract(
     input_str: str, weaviate_url: str, openai_api_token: str, top_n: int = 5
 ):
-    """
-    Get the abstract of the top n papers similar to the input string.
+    """Get the abstract of the top n papers similar to the input string.
 
-    Args:
-        input_str (str): Input string.
-        weaviate_url (str): Weaviate URL.
-        openai_api_token (str): OpenAI API token.
-        n (int): Number of papers to return.
+    :param input_str: Input string.
+    :type input_str: str
+    :param weaviate_url: Weaviate URL.
+    :type weaviate_url: str
+    :param openai_api_token: OpenAI API token.
+    :type openai_api_token: str
+    :param n: Number of papers to return.
+    :type n: int
+    :param input_str: str: 
+    :param weaviate_url: str: 
+    :param openai_api_token: str: 
+    :param top_n: int:  (Default value = 5)
+    :returns: List of papers.
+    :rtype: list
 
-    Returns:
-        list: List of papers.
     """
 
     input_emb = open_ai_embeddings(input_str, openai_api_token)
