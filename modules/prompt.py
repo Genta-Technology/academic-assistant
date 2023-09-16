@@ -34,6 +34,8 @@ def ask_gpt(token, messages, docs):
     """
     # Auth Token
     openai.api_key = token
+    
+    print(len(docs))
 
     #Intitial Question
     if len(docs) > 0:
