@@ -8,6 +8,7 @@ import weaviate
 
 from dotenv import load_dotenv, find_dotenv
 
+
 def open_ai_embeddings(input_str: str, api_token: str):
     """Get the OpenAI embeddings for a given input string.
 
@@ -67,6 +68,7 @@ def get_abstract(input_str: str,
         }).with_limit(top_n).do())
     return response["data"]["Get"]["Paper"]
 
+
 class EnvironmentVariables:
     """
     This class is used to load environment variables from a .env file.
@@ -107,5 +109,6 @@ class EnvironmentVariables:
         """
 
         return self.get(key)
+
 
 env = EnvironmentVariables()
