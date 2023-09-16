@@ -10,14 +10,14 @@ Args:
 import openai
 
 MODEL = "gpt-3.5-turbo"
-CONTEXT_NEW = """As an AI language model,
-     your task is to provide a detailed and scholarly response based on a given abstract: """
-GOALS = """Your response should be focused on the mentioned specific question related to
-     the content of the abstracts. Your goal is to provide a comprehensive and well-informed
-     answer using the information from the provided abstracts. Please ensure that your response 
-     is accurate, detailed, short answer, and relevant to the question asked. 
-     In addition, if the question doesn't related to one of the abstract itself,
-       don't mentioned the abstract itself"""
+CONTEXT_NEW = "As an AI language model, your task is to provide a " +
+              "detailed and scholarly response based on a given abstract: "
+GOALS = "Your response should be focused on the mentioned specific question related to " +
+        "the content of the abstracts. Your goal is to provide a comprehensive and well-informed " +
+        "answer using the information from the provided abstracts. Please ensure that your response " +
+        "is accurate, detailed, short answer, and relevant to the question asked. " +
+        "In addition, if the question doesn't related to one of the abstract itself, " +
+        "don't mentioned the abstract itself"
 
 def ask_gpt(token, messages, docs):
     """
