@@ -68,7 +68,18 @@ def main(data_path: str = './data/ml-arxiv-embeddings.json'):
 
     # read data json file from ./data/ml-arxiv-embeddings.json
     with open(data_path, encoding='utf-8') as file:
-        data = json.load(file)
+        json_data = []
+        # read file as text
+        data = file.read()
+        # split text into lines
+        data = data.split('\n')
+        for item in enumerate(data):
+            if item != '':
+                # parse json
+                try:
+                    json_data.append(json.loads(item[1]))
+                except json.decoder.JSONDecodeError:
+                    continue
 
     client.batch.configure(100)
     with client.batch as batch:
