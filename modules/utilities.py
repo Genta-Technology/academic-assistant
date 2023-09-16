@@ -12,8 +12,8 @@ def open_ai_embeddings(input_str: str, api_token: str):
     :type input_str: str
     :param api_token: OpenAI API token.
     :type api_token: str
-    :param input_str: str: 
-    :param api_token: str: 
+    :param input_str: str:
+    :param api_token: str:
     :returns: List of embeddings.
     :rtype: list
 
@@ -43,9 +43,9 @@ def get_abstract(
     :type openai_api_token: str
     :param n: Number of papers to return.
     :type n: int
-    :param input_str: str: 
-    :param weaviate_url: str: 
-    :param openai_api_token: str: 
+    :param input_str: str:
+    :param weaviate_url: str:
+    :param openai_api_token: str:
     :param top_n: int:  (Default value = 5)
     :returns: List of papers.
     :rtype: list
