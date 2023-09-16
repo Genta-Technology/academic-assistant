@@ -13,11 +13,16 @@ MODEL = "gpt-3.5-turbo"
 CONTEXT_NEW = "As an AI language model, your task is to provide a " + \
               "detailed and scholarly response based on a given abstract: "
 GOALS = "Your response should be focused on the mentioned specific question related to " + \
-        "the content of the abstracts. Your goal is to provide a comprehensive and well-informed " + \
-        "answer using the information from the provided abstracts. Please ensure that your response " + \
-        "is accurate, detailed, short answer, and relevant to the question asked. " + \
-        "In addition, if the question doesn't related to one of the abstract itself, " + \
-        "don't mentioned the abstract itself"
+        "the content of the abstracts. Your goal is to provide a comprehensive and " + \
+        "well-informed answer using the information from the provided abstracts. " + \
+        "Please ensure that your response is accurate, detailed, short answer, " + \
+        "and relevant to the question asked. In addition, if the question " + \
+        "doesn't related to one of the abstract itself, don't mentioned the abstract itself"
+PRE_SEARCH = "Based on the conversation history, your task is to give me an " + \
+        "appropriate query to answer my question for research paper search engine. " + \
+        "If the question is just a normal " + \
+        "conversation to you, your response should said 'EMPTY'. You should " + \
+        "not say more than query. You should not say any words except the query."
 
 def ask_gpt(token, messages, docs):
     """
@@ -40,6 +45,27 @@ def ask_gpt(token, messages, docs):
         new_messages = con_question(messages)
 
     return new_messages
+
+def generate_search(token, messages):
+    """
+    generate search querries for abstract or return EMPTY if no question asked
+
+    Args:
+    - token (str)
+    - messages (list)
+    """
+    # Auth Token
+    openai.api_key = token
+    output=openai.ChatCompletion.create(
+        model=MODEL,
+        messages=search_prompt(messages),
+        temperature=1,
+        max_tokens=256,
+        top_p=1,
+        frequency_penalty=0,
+        presence_penalty=0
+        )
+    return output['choices'][0]['message']['content']
 
 def new_question(messages, docs):
     """
@@ -122,4 +148,15 @@ def abstract_to_string(abstract_dict):
             abstract_dict["authors"] +
             abstract_dict["dOI"] +
             abstract_dict["date"])
+
+def search_prompt(messages):
+    """
+    generate a prompt for search querries
     
+    Args:
+    - messages (list)
+    """
+    main_question = messages[len(messages)-1]["content"]
+    return_question = "My question is: " + main_question +\
+                    PRE_SEARCH
+    return messages + [{"role": "user", "content":return_question}]
