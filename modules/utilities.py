@@ -1,7 +1,6 @@
 """
 This module contains utility functions for the project.
 """
-
 import openai
 import weaviate
 
