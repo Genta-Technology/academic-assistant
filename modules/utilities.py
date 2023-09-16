@@ -25,7 +25,7 @@ def open_ai_embeddings(input_str:str, api_token:str):
     embedding = openai.Embedding.create(input=input_str, model=model_id)['data'][0]['embedding']
     return embedding
 
-def get_abstract(input_str:str, weaviate_url: str, openai_api_token:str, n:int = 5):
+def get_abstract(input_str:str, weaviate_url: str, openai_api_token:str, top_n:int = 5):
     """
     Get the abstract of the top n papers similar to the input string.
 
@@ -51,7 +51,7 @@ def get_abstract(input_str:str, weaviate_url: str, openai_api_token:str, n:int =
         client.query
         .get("Paper", ["dOI", "authors", "abstract", "date"])
         .with_near_vector({'vector': input_emb})
-        .with_limit(n)
+        .with_limit(top_n)
         .do()
     )
     return response["data"]["Get"]["Paper"]
