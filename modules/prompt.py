@@ -18,8 +18,8 @@ GOALS = "Your response should be focused on the mentioned specific question rela
         "well-informed answer using the information from the provided abstracts. " + \
         "Please ensure that your response is accurate, detailed, short answer, " + \
         "and relevant to the question asked. In addition, if the question " + \
-        "doesn't related to one of the abstract itself, don't mentioned the abstract itself"
-PRE_SEARCH = "Based on the conversation history, your task is to give me an " + \
+        "doesn't related to one of the abstract itself, don't mentioned the abstract itself. In addition, your answer should always include the abstract source as (authors, dOI)"
+PRE_SEARCH = "Based on the recent question, your task is to give me an " + \
         "appropriate query to search arxiv paper, or only response with EMPTY If the question does not need a sources to answer. You should " + \
         "not say more than query. You should not say any words except the query or EMPTY."
 
