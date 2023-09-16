@@ -8,6 +8,7 @@ Args:
 """
 
 import openai
+from datetime import date
 
 MODEL = "gpt-3.5-turbo"
 CONTEXT_NEW = "As an AI language model, your task is to provide a " + \
@@ -19,10 +20,8 @@ GOALS = "Your response should be focused on the mentioned specific question rela
         "and relevant to the question asked. In addition, if the question " + \
         "doesn't related to one of the abstract itself, don't mentioned the abstract itself"
 PRE_SEARCH = "Based on the conversation history, your task is to give me an " + \
-        "appropriate query to answer my question for research paper search engine. " + \
-        "If the question is just a normal " + \
-        "conversation to you, your response should said 'EMPTY'. You should " + \
-        "not say more than query. You should not say any words except the query."
+        "appropriate query to search arxiv paper, or only response with EMPTY If the question does not need a sources to answer. You should " + \
+        "not say more than query. You should not say any words except the query or EMPTY."
 
 def ask_gpt(token, messages, docs):
     """
@@ -65,7 +64,9 @@ def generate_search(token, messages):
         frequency_penalty=0,
         presence_penalty=0
         )
-    return output['choices'][0]['message']['content']
+    output = output['choices'][0]['message']['content']
+    output = output if 'as an ai language' not in output.lower() else 'EMPTY'
+    return output
 
 def new_question(messages, docs):
     """
