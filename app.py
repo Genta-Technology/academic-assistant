@@ -1,29 +1,19 @@
-import streamlit as st
-import requests
+"""
+FILE is for UI
+"""
 
-st.title("Genta")
+import streamlit as st
+
+st.title("GENTA")
 
 with st.sidebar:
     st.text_input("**Please enter token**", placeholder="Token", key="token")
-    st.button("Save")
-
-def send_token():
-    Token =   st.session_state.token
-    
-if st.button('Save'):
-    send_token
 
 if "token" not in st.session_state:
     st.session_state.token = ""
-    
-
-
-
-
 
 if "messages" not in st.session_state:
     st.session_state.messages = []
-
 
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
@@ -40,10 +30,4 @@ if prompt := st.chat_input("Wassup"):
     with st.chat_message("assistant"):
         st.markdown(response)
 
-    st.session_state.messages.append(
-        {"role": "assistant", "content": response})
-
-
-
-
-
+    st.session_state.messages.append({"role": "assistant", "content": response})
