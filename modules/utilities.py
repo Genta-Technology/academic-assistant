@@ -2,8 +2,8 @@
 This module contains utility functions for the project.
 """
 
-import weaviate
 import openai
+import weaviate
 
 
 def open_ai_embeddings(input_str: str, api_token: str):
