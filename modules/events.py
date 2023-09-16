@@ -1,4 +1,4 @@
-from utils import get_abstract
+from .utilities import get_abstract
 
 def trigger_event(user_message, user_open_api_token, session):
     if not session:
