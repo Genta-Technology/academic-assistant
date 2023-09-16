@@ -4,6 +4,8 @@ FILE is for UI
 
 import streamlit as st
 
+from modules.events import trigger_event
+
 st.title("GENTA")
 
 with st.sidebar:
@@ -19,15 +21,16 @@ for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
 
-if prompt := st.chat_input("Wassup"):
-    with st.chat_message("user"):
-        st.markdown(prompt)
+if st.session_state.token != "":
+    if prompt := st.chat_input("Wassup"):
+        with st.chat_message("user"):
+            st.markdown(prompt)
 
-    st.session_state.messages.append({"role": "user", "content": prompt})
+        st.session_state.messages.append({"role": "user", "content": prompt})
 
-    response = f"Echo : {prompt}"
+        response = trigger_event()
 
-    with st.chat_message("assistant"):
-        st.markdown(response)
+        with st.chat_message("assistant"):
+            st.markdown(response)
 
-    st.session_state.messages.append({"role": "assistant", "content": response})
+        st.session_state.messages.append({"role": "assistant", "content": response})

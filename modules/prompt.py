@@ -8,16 +8,20 @@ Args:
 """
 
 import openai
+from datetime import date
 
 MODEL = "gpt-3.5-turbo"
-CONTEXT_NEW = "As an AI language model, your task is to provide a " +
+CONTEXT_NEW = "As an AI language model, your task is to provide a " + \
               "detailed and scholarly response based on a given abstract: "
-GOALS = "Your response should be focused on the mentioned specific question related to " +
-        "the content of the abstracts. Your goal is to provide a comprehensive and well-informed " +
-        "answer using the information from the provided abstracts. Please ensure that your response " +
-        "is accurate, detailed, short answer, and relevant to the question asked. " +
-        "In addition, if the question doesn't related to one of the abstract itself, " +
-        "don't mentioned the abstract itself"
+GOALS = "Your response should be focused on the mentioned specific question related to " + \
+        "the content of the abstracts. Your goal is to provide a comprehensive and " + \
+        "well-informed answer using the information from the provided abstracts. " + \
+        "Please ensure that your response is accurate, detailed, short answer, " + \
+        "and relevant to the question asked. In addition, if the question " + \
+        "doesn't related to one of the abstract itself, don't mentioned the abstract itself"
+PRE_SEARCH = "Based on the conversation history, your task is to give me an " + \
+        "appropriate query to search arxiv paper, or only response with EMPTY If the question does not need a sources to answer. You should " + \
+        "not say more than query. You should not say any words except the query or EMPTY."
 
 def ask_gpt(token, messages, docs):
     """
@@ -40,6 +44,29 @@ def ask_gpt(token, messages, docs):
         new_messages = con_question(messages)
 
     return new_messages
+
+def generate_search(token, messages):
+    """
+    generate search querries for abstract or return EMPTY if no question asked
+
+    Args:
+    - token (str)
+    - messages (list)
+    """
+    # Auth Token
+    openai.api_key = token
+    output=openai.ChatCompletion.create(
+        model=MODEL,
+        messages=search_prompt(messages),
+        temperature=1,
+        max_tokens=256,
+        top_p=1,
+        frequency_penalty=0,
+        presence_penalty=0
+        )
+    output = output['choices'][0]['message']['content']
+    output = output if 'as an ai language' not in output.lower() else 'EMPTY'
+    return output
 
 def new_question(messages, docs):
     """
@@ -69,7 +96,7 @@ def con_question(messages):
     Args:
     - messages (dict)
     """
-    output=openai.ChatCompletion.create(
+    output = openai.ChatCompletion.create(
         model=MODEL,
         messages=messages,
         temperature=1,
@@ -77,7 +104,7 @@ def con_question(messages):
         top_p=1,
         frequency_penalty=0,
         presence_penalty=0
-        )
+    )
     return messages + [{"role": "assistant", "content":output['choices'][0]['message']['content']}]
 
 def add_system(messages, docs):
@@ -99,16 +126,14 @@ def docs_compile(docs):
     - docs (list)
     """
     combined_docs = ""
-    j = 1
 
-    for i in docs["data"]["Get"]["Paper"]:
-        abstract, author, doi, date = abstract_to_string(i)
-        abstract_context = ("Abstract " + str(j) + ":" + abstract +
-                            ", the author of abstract " + str(j) + "is" + author +
+    for i, doc in enumerate(docs):
+        abstract, author, doi, date = abstract_to_string(doc)
+        abstract_context = ("Abstract " + str(i + 1) + ":" + abstract +
+                            ", the author of abstract " + str(i + 1) + "is" + author +
                             ", with dOI number: " + doi +
                             ", with date published: " + date + ". ")
         combined_docs += abstract_context
-        j += 1
     return combined_docs
 
 def abstract_to_string(abstract_dict):
@@ -118,8 +143,19 @@ def abstract_to_string(abstract_dict):
     Args:
     - abstract (dict):
     """
-    return (abstract_dict["abstract"] +
-            abstract_dict["authors"] +
-            abstract_dict["dOI"] +
+    return (abstract_dict["abstract"],
+            abstract_dict["authors"],
+            abstract_dict["dOI"],
             abstract_dict["date"])
+
+def search_prompt(messages):
+    """
+    generate a prompt for search querries
     
+    Args:
+    - messages (list)
+    """
+    main_question = messages[len(messages)-1]["content"]
+    return_question = "My question is: " + main_question +\
+                    PRE_SEARCH
+    return messages + [{"role": "user", "content":return_question}]
