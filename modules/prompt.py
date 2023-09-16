@@ -96,7 +96,7 @@ def con_question(messages):
     Args:
     - messages (dict)
     """
-    output=openai.ChatCompletion.create(
+    output = openai.ChatCompletion.create(
         model=MODEL,
         messages=messages,
         temperature=1,
@@ -104,7 +104,7 @@ def con_question(messages):
         top_p=1,
         frequency_penalty=0,
         presence_penalty=0
-        )
+    )
     return messages + [{"role": "assistant", "content":output['choices'][0]['message']['content']}]
 
 def add_system(messages, docs):
@@ -126,16 +126,14 @@ def docs_compile(docs):
     - docs (list)
     """
     combined_docs = ""
-    j = 1
 
-    for i in docs["data"]["Get"]["Paper"]:
-        abstract, author, doi, date = abstract_to_string(i)
-        abstract_context = ("Abstract " + str(j) + ":" + abstract +
-                            ", the author of abstract " + str(j) + "is" + author +
+    for i, doc in enumerate(docs):
+        abstract, author, doi, date = abstract_to_string(doc)
+        abstract_context = ("Abstract " + str(i + 1) + ":" + abstract +
+                            ", the author of abstract " + str(i + 1) + "is" + author +
                             ", with dOI number: " + doi +
                             ", with date published: " + date + ". ")
         combined_docs += abstract_context
-        j += 1
     return combined_docs
 
 def abstract_to_string(abstract_dict):
@@ -145,9 +143,9 @@ def abstract_to_string(abstract_dict):
     Args:
     - abstract (dict):
     """
-    return (abstract_dict["abstract"] +
-            abstract_dict["authors"] +
-            abstract_dict["dOI"] +
+    return (abstract_dict["abstract"],
+            abstract_dict["authors"],
+            abstract_dict["dOI"],
             abstract_dict["date"])
 
 def search_prompt(messages):
