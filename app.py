@@ -7,7 +7,8 @@ import streamlit as st
 from modules.utilities import validate_openai_api_key
 
 st.title("GENTA - Academic Assitant")
-st.write("Genta Acadmic Assistant is a tool to help you find the right research paper for your research.")
+st.write("Genta Acadmic Assistant is a tool to help you" +
+         "find the right research paper for your research.")
 
 def on_token_change():
     """
