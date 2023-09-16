@@ -81,7 +81,7 @@ def new_question(messages, docs):
         model=MODEL,
         messages=new_messages,
         temperature=1,
-        max_tokens=256,
+        max_tokens=512,
         top_p=1,
         frequency_penalty=0,
         presence_penalty=0
@@ -100,7 +100,7 @@ def con_question(messages):
         model=MODEL,
         messages=messages,
         temperature=1,
-        max_tokens=256,
+        max_tokens=512,
         top_p=1,
         frequency_penalty=0,
         presence_penalty=0
