@@ -30,11 +30,11 @@ st.markdown(
 
 
 def on_token_change():
-    """
-    Callback for token change.
+    """Callback for token change.
 
-    Returns:
-        None.
+
+    :returns: None.
+
     """
 
     if not validate_openai_api_key(st.session_state.token):
