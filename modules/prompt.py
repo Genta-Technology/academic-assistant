@@ -12,13 +12,13 @@ from datetime import date
 
 MODEL = "gpt-3.5-turbo"
 CONTEXT_NEW = "As an AI language model, your task is to provide a " + \
-              "detailed and scholarly response based on a given abstract: "
+              "detailed and scholarly response based on this given abstract: "
 GOALS = "Your response should be focused on the mentioned specific question related to " + \
         "the content of the abstracts. Your goal is to provide a comprehensive and " + \
         "well-informed answer using the information from the provided abstracts. " + \
         "Please ensure that your response is accurate, detailed, short answer, " + \
         "and relevant to the question asked. In addition, if the question " + \
-        "doesn't related to one of the abstract itself, don't mentioned the abstract itself. In addition, your answer should always include the abstract source as (authors, dOI)"
+        "doesn't related to one of the abstract itself, response with 'i don't know the answer to this question based on my database'. In addition, your answer should always include the abstract source as (authors, dOI)"
 PRE_SEARCH = "Based on the recent question, your task is to give me an " + \
         "appropriate query to search arxiv paper, or only response with EMPTY If the question does not need a sources to answer. You should " + \
         "not say more than query. You should not say any words except the query or EMPTY."
@@ -58,11 +58,8 @@ def generate_search(token, messages):
     output=openai.ChatCompletion.create(
         model=MODEL,
         messages=search_prompt(messages),
-        temperature=1,
+        temperature=0.6,
         max_tokens=256,
-        top_p=1,
-        frequency_penalty=0,
-        presence_penalty=0
         )
     output = output['choices'][0]['message']['content']
     output = output if 'as an ai language' not in output.lower() else 'EMPTY'
@@ -80,13 +77,11 @@ def new_question(messages, docs):
     output=openai.ChatCompletion.create(
         model=MODEL,
         messages=new_messages,
-        temperature=1,
-        max_tokens=512,
-        top_p=1,
-        frequency_penalty=0,
-        presence_penalty=0
+        temperature=0.8,
+        max_tokens=512
         )
-    new_messages += [{"role": "assistant", "content":output['choices'][0]['message']['content']}]
+    output = add_source(output, docs)
+    new_messages += [{"role": "assistant", "content":output}]
     return new_messages
 
 def con_question(messages):
@@ -99,11 +94,8 @@ def con_question(messages):
     output = openai.ChatCompletion.create(
         model=MODEL,
         messages=messages,
-        temperature=1,
-        max_tokens=512,
-        top_p=1,
-        frequency_penalty=0,
-        presence_penalty=0
+        temperature=0.5,
+        max_tokens=512
     )
     return messages + [{"role": "assistant", "content":output['choices'][0]['message']['content']}]
 
@@ -159,3 +151,31 @@ def search_prompt(messages):
     return_question = "My question is: " + main_question +\
                     PRE_SEARCH
     return messages + [{"role": "user", "content":return_question}]
+
+def add_source(output, docs):
+    """
+    create reference (Title, Author, Date)
+
+    Args:
+    - output (OpenAI dict)
+    - docs (list)
+    """
+    output = output['choices'][0]['message']['content']
+    output = "Reference: " + get_citation(docs) + output
+    return output
+
+def get_citation(docs):
+    """
+    combined all abstracts to add citation
+
+    Args:
+    - docs (list)
+    """
+    combined_docs = ""
+
+    for i, doc in enumerate(docs):
+        abstract, author, doi, date = abstract_to_string(doc)
+        abstract_context = ("Abstract: \n" + str(i + 1) + ", " + author +
+                            ",  " + doi + ", " + date + "; ")
+        combined_docs += abstract_context
+    return combined_docs + " \n \n"
