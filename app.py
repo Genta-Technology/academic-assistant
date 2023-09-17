@@ -8,6 +8,16 @@ from PIL import Image
 from modules.utilities import validate_openai_api_key
 from modules.events import trigger_event
 
+image_directory = "./Genta_Logo.png"
+image = Image.open(image_directory)
+
+PAGE_CONFIG = {
+    "page_title":"Academic Assistant", 
+    "page_icon":image
+}
+
+st.set_page_config(**PAGE_CONFIG)
+
 TITLE = ('<link rel="stylesheet" type="text/css"' +
          'href="http://fonts.googleapis.com/css?family=Ubuntu:regular,bold&subset=Latin">' + 
          '<H1 style="font-family:Ubuntu; font-size: 30px; font-weight:bold;">' +
