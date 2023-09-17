@@ -63,7 +63,7 @@ def get_abstract(input_str: str,
     )
 
     response = (client.query
-        .get("Paper", ["dOI", "authors", "abstract", "date"])
+        .get("Paper", ["dOI", "authors", "abstract", "date", "title"])
         .with_near_vector({"vector": input_emb})
         .with_additional(['certainty'])
         .with_limit(top_n)

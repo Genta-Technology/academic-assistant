@@ -18,13 +18,13 @@ if "messages" not in st.session_state:
     st.session_state.messages = [
         {
             "role": "system", 
-            "content":  'You will be provided with a document delimited by triple quotes and a question. ' + \
-                        'Your task is to answer the question using only the provided document and to cite ' + \
-                        'the passage(s) of the document used to answer the question. If the document does ' + \
+            "content":  'You will be provided with multiple documents delimited by triple quotes and a question. ' + \
+                        'Your task is to answer the question using only the provided documents and to cite ' + \
+                        'the passage(s) of the documents used to answer the question. If the documents does ' + \
                         'not contain the information needed to answer this question then simply write: ' + \
                         '"Insufficient information." If an answer to the question is provided, it must ' + \
-                        'be annotated with a citation. Use the following format for to cite relevant passages ' + \
-                        '({"citation": …}).'
+                        'be annotated with a citations. Use the following format for to cite relevant passages ' + \
+                        '({"citations": ..., ..., ...}).'
         }
     ]
 
