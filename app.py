@@ -8,8 +8,8 @@ from PIL import Image
 from modules.utilities import validate_openai_api_key
 from modules.events import trigger_event
 
-image_directory = "./Genta_Logo.png"
-image = Image.open(image_directory)
+IMAGE_DIRECTORY = "./Genta_Logo.png"
+image = Image.open(IMAGE_DIRECTORY)
 
 PAGE_CONFIG = {
     "page_title":"Academic Assistant", 
