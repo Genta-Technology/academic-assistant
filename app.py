@@ -11,7 +11,7 @@ from modules.events import trigger_event
 TITLE = ('<link rel="stylesheet" type="text/css"' +
          'href="http://fonts.googleapis.com/css?family=Ubuntu:regular,bold&subset=Latin">' + 
          '<H1 style="font-family:Ubuntu; font-size: 30px; font-weight:bold;">' +
-         '<span style="font-size = 40px;">GENTA</span> - Academic Assitant</H1>')
+         '<span style="font-size = 40px;">GENTA</span> - Academic Assistant</H1>')
 
 st.markdown(TITLE, unsafe_allow_html=True)
 st.markdown("""Genta Acadmic Assistant is a tool to help you""" +
