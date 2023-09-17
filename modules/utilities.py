@@ -5,8 +5,26 @@ A collection of utility functions.
 import os
 import openai
 import weaviate
+import requests
 
 from dotenv import load_dotenv, find_dotenv
+
+def validate_openai_api_key(api_key: str) -> bool:
+    """
+    Validate OpenAI API Key
+
+    Returns:
+        bool: True if valid, False otherwise.
+    """
+
+    openai_api_endpoint = "https://api.openai.com/v1/engines"
+
+    headers = {"Authorization": f"Bearer {api_key}"}
+
+    response = requests.get(openai_api_endpoint, headers=headers, timeout=10)
+
+    # Check the status code of the response
+    return response.status_code == 200
 
 def open_ai_embeddings(input_str: str, api_token: str):
     """Get the OpenAI embeddings for a given input string.
@@ -59,12 +77,16 @@ def get_abstract(input_str: str,
 
     client = weaviate.Client(
         url=weaviate_url,
-        additional_headers={"X-OpenAI-Api-Key": openai_api_token})
-    response = (client.query.get(
-        "Paper", ["dOI", "authors", "abstract", "date"]).with_near_vector({
-            "vector":
-            input_emb
-        }).with_limit(top_n).do())
+        additional_headers={"X-OpenAI-Api-Key": openai_api_token}
+    )
+
+    response = (client.query
+        .get("Paper", ["dOI", "authors", "abstract", "date", "title"])
+        .with_near_vector({"vector": input_emb})
+        .with_additional(['certainty'])
+        .with_limit(top_n)
+        .do())
+
     return response["data"]["Get"]["Paper"]
 
 class EnvironmentVariables:
