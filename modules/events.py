@@ -28,4 +28,4 @@ def trigger_event():
     # user_message: list(dict) -> [{"role": "system" or "assistant" or "user", "content": str}]
     new_user_message = ask_gpt(st.session_state.token, st.session_state.messages, abstract_list)
 
-    return new_user_message[-1]['content']
+    return new_user_message[-1]['content'], abstract_list

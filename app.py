@@ -8,8 +8,6 @@ from PIL import Image
 from modules.utilities import validate_openai_api_key
 from modules.events import trigger_event
 
-st.title("GENTA")
-
 TITLE = ('<link rel="stylesheet" type="text/css"' +
          'href="http://fonts.googleapis.com/css?family=Ubuntu:regular,bold&subset=Latin">' + 
          '<H1 style="font-family:Ubuntu; font-size: 30px; font-weight:bold;">' +
@@ -62,17 +60,20 @@ if st.session_state.token:
     if prompt := st.chat_input("Wassup"):
         with st.chat_message("user"):
             st.markdown(prompt)
-            with st.expander("sources:"):
-                st.write("test1")
-                st.write("test2")
-                st.write("test3")
+            # with st.expander("sources:"):
+            #     st.write("test1")
+            #     st.write("test2")
+            #     st.write("test3")
 
         st.session_state.messages.append({"role": "user", "content": prompt})
 
-        response = trigger_event()
+        response, docs = trigger_event()
 
         with st.chat_message("assistant"):
             st.markdown(response)
+            with st.expander("Arxiv Search Results"):
+                for doc in docs:
+                    st.markdown(f"<a href='https://arxiv.org/abs/{doc['dOI']}'>{doc['title']}, {doc['authors']}, {doc['date']}</a>", unsafe_allow_html=True)
 
         st.session_state.messages.append({"role": "assistant", "content": response})
         
