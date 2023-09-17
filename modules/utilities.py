@@ -59,12 +59,16 @@ def get_abstract(input_str: str,
 
     client = weaviate.Client(
         url=weaviate_url,
-        additional_headers={"X-OpenAI-Api-Key": openai_api_token})
-    response = (client.query.get(
-        "Paper", ["dOI", "authors", "abstract", "date"]).with_near_vector({
-            "vector":
-            input_emb
-        }).with_limit(top_n).do())
+        additional_headers={"X-OpenAI-Api-Key": openai_api_token}
+    )
+
+    response = (client.query
+        .get("Paper", ["dOI", "authors", "abstract", "date"])
+        .with_near_vector({"vector": input_emb})
+        .with_additional(['certainty'])
+        .with_limit(top_n)
+        .do())
+    
     return response["data"]["Get"]["Paper"]
 
 class EnvironmentVariables:
