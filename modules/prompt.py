@@ -11,8 +11,9 @@ import openai
 
 MODEL = "gpt-3.5-turbo"
 PRE_SEARCH = "Based on the recent question, your task is to give me an " + \
-        "appropriate query to search arxiv paper, or only response with EMPTY If the question does not need a sources to answer. You should " + \
-        "not say more than query. You should not say any words except the query or EMPTY."
+             "appropriate query to search arxiv paper, or only response with " + \
+             "EMPTY If the question does not need a sources to answer. You should " + \
+             "not say more than query. You should not say any words except the query or EMPTY."
 
 def ask_gpt(token, messages, docs):
     """
@@ -25,7 +26,7 @@ def ask_gpt(token, messages, docs):
     """
     # Auth Token
     openai.api_key = token
-    
+
     #Intitial Question
     if len(docs) > 0:
         new_messages = new_question(messages, docs)
@@ -89,11 +90,15 @@ def create_user_context(question, sources):
     """
     user_context = "My question is: " + question + ". " + \
                    "My sources are: " + sources + ". " + \
-                   "Answer the question only if you can find the answer in the sources. " + \
-                   "If you can't find the answer in any of the sources, response with " +\
-                   "'i don't know the answer to this question based on my current knowledge'. " + \
-                   "Add the source of your answer as (authors, dOI) for every text you get from the sources."
-    
+                   "Answer the question only if you can " + \
+                   "find the answer in the sources. " + \
+                   "If you can't find the answer in any of " + \
+                   "the sources, response with " +\
+                   "'i don't know the answer to this question " + \
+                   "based on my current knowledge'. " + \
+                   "Add the source of your answer as (authors, dOI) " + \
+                   "for every text you get from the sources."
+
     return user_context
 
 def con_question(messages):
@@ -124,7 +129,7 @@ def mod_new_messages(messages, docs):
     """
     prompt = docs_compile(docs) + "\n Question: " + messages[-1]["content"]
     messages = messages[:-1]
-    
+
     return messages + [{"role":"user", "content":prompt}]
 
 def docs_compile(docs):
@@ -137,7 +142,7 @@ def docs_compile(docs):
     combined_docs = '"""'
 
     for doc in docs:
-        abstract, author, doi, date, title = abstract_to_string(doc)
+        abstract, author, doi, date = abstract_to_string(doc)
         abstract_context = abstract +\
                             "\n {citation: " + f"{author}, {date}, {doi}" + "}\n"
         combined_docs += abstract_context
@@ -153,8 +158,7 @@ def abstract_to_string(abstract_dict):
     return (abstract_dict["abstract"],
             abstract_dict["authors"],
             abstract_dict["dOI"],
-            abstract_dict["date"],
-            abstract_dict["title"])
+            abstract_dict["date"])
 
 def search_prompt(messages):
     """

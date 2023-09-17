@@ -18,9 +18,11 @@ def trigger_event():
     session_message = generate_search(st.session_state.token, st.session_state.messages)
 
     if session_message.lower() != "empty":
-        abstract_list = get_abstract(input_str=session_message,
-                                    weaviate_url='https://genta-academic-assistant-cluster-4vw2zql4.weaviate.network',
-                                    openai_api_token=st.session_state.token)
+        abstract_list = get_abstract(
+            input_str=session_message,
+            weaviate_url='https://genta-academic-assistant-cluster-4vw2zql4.weaviate.network',
+            openai_api_token=st.session_state.token
+        )
     else:
         abstract_list = []
 

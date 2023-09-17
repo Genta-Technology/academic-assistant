@@ -86,7 +86,7 @@ def get_abstract(input_str: str,
         .with_additional(['certainty'])
         .with_limit(top_n)
         .do())
-    
+
     return response["data"]["Get"]["Paper"]
 
 class EnvironmentVariables:

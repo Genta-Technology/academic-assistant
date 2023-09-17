@@ -36,18 +36,27 @@ with st.sidebar:
         st.image(img, use_column_width="always")
     BOX = '<style>#input {box-shadow: 10px 5px 5px black;}</style>'
     st.markdown(BOX, unsafe_allow_html=True)
-    st.text_input("Please enter token", placeholder="Token", key="token", on_change=on_token_change)
+    st.text_input(
+        "Please enter token", placeholder="Token", 
+        key="token", on_change=on_token_change
+    )
 
 if "messages" not in st.session_state:
     st.session_state.messages = [
         {
             "role": "system", 
-            "content":  'You will be provided with multiple documents delimited by triple quotes and a question. ' + \
-                        'Your task is to answer the question using only the provided documents and to cite ' + \
-                        'the passage(s) of the documents used to answer the question. If the documents does ' + \
-                        'not contain the information needed to answer this question then simply write: ' + \
-                        '"Insufficient information." If an answer to the question is provided, it must ' + \
-                        'be annotated with a citations. Use the following format for to cite relevant passages ' + \
+            "content":  'You will be provided with multiple documents ' + \
+                        'delimited by triple quotes and a question. ' + \
+                        'Your task is to answer the question using only ' + \
+                        'the provided documents and to cite ' + \
+                        'the passage(s) of the documents used to answer ' + \
+                        'the question. If the documents does ' + \
+                        'not contain the information needed to ' + \
+                        'answer this question then simply write: ' + \
+                        '"Insufficient information." If an answer ' + \
+                        'to the question is provided, it must ' + \
+                        'be annotated with a citations. Use the following ' + \
+                        'format for to cite relevant passages ' + \
                         '({"citations": ..., ..., ...}).'
         }
     ]
@@ -60,10 +69,6 @@ if st.session_state.token:
     if prompt := st.chat_input("Wassup"):
         with st.chat_message("user"):
             st.markdown(prompt)
-            # with st.expander("sources:"):
-            #     st.write("test1")
-            #     st.write("test2")
-            #     st.write("test3")
 
         st.session_state.messages.append({"role": "user", "content": prompt})
 
@@ -73,10 +78,14 @@ if st.session_state.token:
             st.markdown(response)
             with st.expander("Arxiv Search Results"):
                 for doc in docs:
-                    st.markdown(f"<a href='https://arxiv.org/abs/{doc['dOI']}'>{doc['title']}, {doc['authors']}, {doc['date']}</a>", unsafe_allow_html=True)
+                    st.markdown(
+                        f"<a href='https://arxiv.org/abs/{doc['dOI']}'>" + \
+                        f"{doc['title']}, {doc['authors']}, {doc['date']}</a>", 
+                        unsafe_allow_html=True
+                    )
 
         st.session_state.messages.append({"role": "assistant", "content": response})
-        
+
 else:
     TEXT = ('<p style="font-size: 18px; font-weight:bold; color: #FF1D2E; margin-top: 15px;">' +
             'Please enter your OpenAI API TOKEN first in the sidebar to use this application</p>')
