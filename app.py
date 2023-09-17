@@ -3,10 +3,10 @@ FILE is for UI
 """
 
 import streamlit as st
-
 from PIL import Image
-from modules.utilities import validate_openai_api_key
+
 from modules.events import trigger_event
+from modules.utilities import validate_openai_api_key
 
 IMAGE_DIRECTORY = "./Genta_Logo.png"
 image = Image.open(IMAGE_DIRECTORY)
