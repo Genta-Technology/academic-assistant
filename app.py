@@ -1,7 +1,6 @@
 """
 FILE is for UI
 """
-
 import streamlit as st
 from PIL import Image
 
