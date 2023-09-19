@@ -79,7 +79,7 @@ if (len(st.session_state.messages) <= 8
 
         with st.chat_message("assistant"):
             st.markdown(response)
-            with st.expander("Arxiv Search Results"):
+            with st.expander("Search Results"):
                 for doc in docs:
                     st.markdown(
                         f"<a href='https://arxiv.org/abs/{doc['dOI']}'>" +
