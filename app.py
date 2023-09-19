@@ -82,7 +82,7 @@ if (len(st.session_state.messages) <= 8
             with st.expander("Search Results"):
                 for doc in docs:
                     st.markdown(
-                        f"<a href='https://arxiv.org/abs/{doc['dOI']}'>" +
+                        f"<a href='https://doi.org/{doc['dOI']}'>" +
                         f"{doc['title']}, {doc['authors']}, {doc['date']}</a>",
                         unsafe_allow_html=True,
                     )
