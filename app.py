@@ -18,8 +18,8 @@ st.set_page_config(**PAGE_CONFIG)
 
 TITLE = (
     '<link rel="stylesheet" type="text/css"' +
-    'href="http://fonts.googleapis.com/css?family=Ubuntu:regular,bold&subset=Latin">'
-    + '<H1 style="font-family:Ubuntu; font-size: 30px; font-weight:bold;">' +
+    'href="http://fonts.googleapis.com/css?family=Ubuntu:regular,bold&subset=Latin">' + 
+    '<H1 style="font-family:Ubuntu; font-size: 30px; font-weight:bold;">' +
     '<span style="font-size = 40px;">GENTA</span> - Academic Assistant</H1>')
 
 st.markdown(TITLE, unsafe_allow_html=True)

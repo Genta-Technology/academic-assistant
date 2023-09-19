@@ -5,7 +5,6 @@ main python file for events and handling communication to gpt and get abstract
 import streamlit as st
 
 from .prompt import ask_gpt, generate_search
-from .utilities import get_abstract
 from .utilities import search_semantics
 
 def trigger_event(token: str):

@@ -6,7 +6,6 @@ import os
 import openai
 import weaviate
 import requests
-import json
 
 from dotenv import load_dotenv, find_dotenv
 
@@ -155,29 +154,30 @@ def search_semantics(querry, total=20):
     - querry (str)
     - total (int) (between 1-10, set default to 5) [optional]
     """
-    url_search = f"https://api.semanticscholar.org/graph/v1/paper" + \
+    url_search = "https://api.semanticscholar.org/graph/v1/paper" + \
                  f"/search?query={querry.replace(' ', '+')}&limit=" + \
                  f"{total}&fields=abstract,authors,year,externalIds" + \
-                 f",title,publicationDate"
+                 ",title,publicationDate"
 
-    result = requests.get(url_search)
+    result = requests.get(url_search, timeout=10)
 
     docs = []
     if result.status_code == 200:
-      result = result.json()
-      for i in range(total):
-        if "DOI" not in result["data"][i]['externalIds'] or result["data"][i]["abstract"] == None:
-            continue
+        result = result.json()
+        for i in range(total):
+            if "DOI" not in result["data"][i]['externalIds'] or \
+                result["data"][i]["abstract"] is None:
+                continue
 
-        doc = {
-            "dOI": result["data"][i]["externalIds"]["DOI"], 
-            "abstract": result["data"][i]["abstract"],
-            "title":result["data"][i]["title"],
-            "date":result["data"][i]["publicationDate"],
-            "authors":get_authors(result["data"][i]["authors"])
-        }
-        docs += [doc]
-    
+            doc = {
+                "dOI": result["data"][i]["externalIds"]["DOI"], 
+                "abstract": result["data"][i]["abstract"],
+                "title":result["data"][i]["title"],
+                "date":result["data"][i]["publicationDate"],
+                "authors":get_authors(result["data"][i]["authors"])
+            }
+            docs += [doc]
+
     return docs[:5]
 
 def get_authors(list_author):
