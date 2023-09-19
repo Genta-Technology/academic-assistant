@@ -18,8 +18,6 @@ def trigger_event(token: str):
     # check if the question need source
     session_message = generate_search(token, st.session_state.messages)
 
-    st.write(session_message)
-
     if session_message.lower() != "empty":
         # abstract_list = get_abstract(
         #     input_str=session_message,
