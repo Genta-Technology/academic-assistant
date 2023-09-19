@@ -6,6 +6,7 @@ import streamlit as st
 
 from .prompt import ask_gpt, generate_search
 from .utilities import get_abstract
+from .utilities import search_semantics
 
 def trigger_event():
     """
@@ -17,12 +18,15 @@ def trigger_event():
     # check if the question need source
     session_message = generate_search(st.session_state.token, st.session_state.messages)
 
+    st.write(session_message)
+
     if session_message.lower() != "empty":
-        abstract_list = get_abstract(
-            input_str=session_message,
-            weaviate_url='https://genta-academic-assistant-cluster-4vw2zql4.weaviate.network',
-            openai_api_token=st.session_state.token
-        )
+        # abstract_list = get_abstract(
+        #     input_str=session_message,
+        #     weaviate_url='https://genta-academic-assistant-cluster-4vw2zql4.weaviate.network',
+        #     openai_api_token=st.session_state.token
+        # )
+        abstract_list = search_semantics(session_message)
     else:
         abstract_list = []
 

@@ -6,8 +6,10 @@ import os
 import openai
 import weaviate
 import requests
+import json
 
 from dotenv import load_dotenv, find_dotenv
+
 
 def validate_openai_api_key(api_key: str) -> bool:
     """
@@ -25,6 +27,7 @@ def validate_openai_api_key(api_key: str) -> bool:
 
     # Check the status code of the response
     return response.status_code == 200
+
 
 def open_ai_embeddings(input_str: str, api_token: str):
     """Get the OpenAI embeddings for a given input string.
@@ -81,13 +84,14 @@ def get_abstract(input_str: str,
     )
 
     response = (client.query
-        .get("Paper", ["dOI", "authors", "abstract", "date", "title"])
-        .with_near_vector({"vector": input_emb})
-        .with_additional(['certainty'])
-        .with_limit(top_n)
-        .do())
+                .get("Paper", ["dOI", "authors", "abstract", "date", "title"])
+                .with_near_vector({"vector": input_emb})
+                .with_additional(['certainty'])
+                .with_limit(top_n)
+                .do())
 
     return response["data"]["Get"]["Paper"]
+
 
 class EnvironmentVariables:
     """
@@ -130,4 +134,53 @@ class EnvironmentVariables:
 
         return self.get(key)
 
+
 env = EnvironmentVariables()
+
+
+def search_semantics(querry, total=20):
+    """
+    search the querry using the semantics api
+
+    Args:
+    - querry (str)
+    - total (int) (between 1-10, set default to 5) [optional]
+    """
+    url_search = f"https://api.semanticscholar.org/graph/v1/paper" + \
+                 f"/search?query={querry.replace(' ', '+')}&limit=" + \
+                 f"{total}&fields=abstract,authors,year,externalIds" + \
+                 f",title,publicationDate"
+
+    result = requests.get(url_search)
+
+    docs = []
+    if result.status_code == 200:
+      result = result.json()
+      for i in range(total):
+        if "DOI" not in result["data"][i]['externalIds'] or result["data"][i]["abstract"] == None:
+            continue
+
+        doc = {
+            "dOI": result["data"][i]["externalIds"]["DOI"], 
+            "abstract": result["data"][i]["abstract"],
+            "title":result["data"][i]["title"],
+            "date":result["data"][i]["publicationDate"],
+            "authors":get_authors(result["data"][i]["authors"])
+        }
+        docs += [doc]
+    
+    return docs[:5]
+
+def get_authors(list_author):
+    """
+    consumed list of dictionary author and return just list of authors name
+
+    Args:
+    - list_author (list)
+    """
+    new_list = []
+
+    for i in list_author:
+        new_list += [i["name"]]
+
+    return new_list
