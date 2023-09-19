@@ -5,7 +5,8 @@ import streamlit as st
 from PIL import Image
 
 from modules.events import trigger_event
-from modules.utilities import EnvironmentVariables, validate_openai_api_key
+from modules.utilities import EnvironmentVariables
+from modules.utilities import validate_openai_api_key
 
 env = EnvironmentVariables()
 
