@@ -63,9 +63,7 @@ for message in st.session_state.messages[1:]:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
 
-st.write(len(st.session_state.messages))
-
-if (len(st.session_state.messages) <= 11 and ("token" in st.session_state or st.session_state.token == "")) or \
+if (len(st.session_state.messages) <= 10 and ("token" in st.session_state or st.session_state.token == "")) or \
    (validate_openai_api_key(st.session_state.token) and "token" in st.session_state):
     if prompt := st.chat_input("Wassup"):
         with st.chat_message("user"):
