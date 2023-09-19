@@ -35,7 +35,7 @@ with st.sidebar:
     st.markdown(BOX, unsafe_allow_html=True)
     st.text_input(
         "Please enter token",
-        placeholder="Token",
+        placeholder="Optional",
         key="token",
     )
 
