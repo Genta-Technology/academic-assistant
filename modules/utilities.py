@@ -129,5 +129,16 @@ class EnvironmentVariables:
         """
 
         return self.get(key)
+    
+    def __getitem__(self, key: str) -> str:
+        """
+        Get an environment variable.
 
-env = EnvironmentVariables()
+        Args:
+            key (str): Environment variable key.
+
+        Returns:
+            str: Environment variable value.
+        """
+
+        return self.get(key)
