@@ -63,29 +63,41 @@ for message in st.session_state.messages[1:]:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
 
-if prompt := st.chat_input("Wassup"):
-    with st.chat_message("user"):
-        st.markdown(prompt)
+st.write(len(st.session_state.messages))
 
-    st.session_state.messages.append({"role": "user", "content": prompt})
+if (len(st.session_state.messages) <= 11 and ("token" in st.session_state or st.session_state.token == "")) or \
+   (validate_openai_api_key(st.session_state.token) and "token" in st.session_state):
+    if prompt := st.chat_input("Wassup"):
+        with st.chat_message("user"):
+            st.markdown(prompt)
 
-    response, docs = trigger_event(
-        st.session_state.token
-        if ("token" in st.session_state and validate_openai_api_key(st.session_state.token))
-        else env["OPENAI_API_KEY"]
+        st.session_state.messages.append({"role": "user", "content": prompt})
+
+        response, docs = trigger_event(
+            st.session_state.token
+            if ("token" in st.session_state and validate_openai_api_key(st.session_state.token))
+            else env["OPENAI_API_KEY"]
+        )
+
+        with st.chat_message("assistant"):
+            st.markdown(response)
+            with st.expander("Arxiv Search Results"):
+                for doc in docs:
+                    st.markdown(
+                        f"<a href='https://arxiv.org/abs/{doc['dOI']}'>" +
+                        f"{doc['title']}, {doc['authors']}, {doc['date']}</a>",
+                        unsafe_allow_html=True,
+                    )
+
+        st.session_state.messages.append({
+            "role": "assistant",
+            "content": response
+        })
+else:
+    TEXT = (
+        '<p style="font-size: 18px; font-weight:bold; color: #FF1D2E; margin-top: 15px;">'
+        +
+        "Limit exceeded, refresh the page to start a new conversation or insert your own" + \
+        " <a href='https://platform.openai.com/account/api-keys'>OpenAI API key</a> in the sidebar.</p>"
     )
-
-    with st.chat_message("assistant"):
-        st.markdown(response)
-        with st.expander("Arxiv Search Results"):
-            for doc in docs:
-                st.markdown(
-                    f"<a href='https://arxiv.org/abs/{doc['dOI']}'>" +
-                    f"{doc['title']}, {doc['authors']}, {doc['date']}</a>",
-                    unsafe_allow_html=True,
-                )
-
-    st.session_state.messages.append({
-        "role": "assistant",
-        "content": response
-    })
+    st.markdown(TEXT, unsafe_allow_html=True)
