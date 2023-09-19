@@ -8,7 +8,7 @@ from .prompt import ask_gpt, generate_search
 from .utilities import get_abstract
 from .utilities import search_semantics
 
-def trigger_event():
+def trigger_event(token: str):
     """
     Trigger the event for every user input.
     
@@ -16,7 +16,7 @@ def trigger_event():
         list: List of messages.
     """
     # check if the question need source
-    session_message = generate_search(st.session_state.token, st.session_state.messages)
+    session_message = generate_search(token, st.session_state.messages)
 
     st.write(session_message)
 
@@ -32,6 +32,6 @@ def trigger_event():
 
     # go to function from farrel
     # user_message: list(dict) -> [{"role": "system" or "assistant" or "user", "content": str}]
-    new_user_message = ask_gpt(st.session_state.token, st.session_state.messages, abstract_list)
+    new_user_message = ask_gpt(token, st.session_state.messages, abstract_list)
 
     return new_user_message[-1]['content'], abstract_list

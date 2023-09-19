@@ -7,13 +7,16 @@ import weaviate
 
 from tqdm import tqdm
 
-from modules import utilities
+from modules.utilities import EnvironmentVariables
+
+# Load environment variables
+env = EnvironmentVariables()
 
 # Create a client
 client = weaviate.Client(
-    url=utilities.env.get('WEAVIATE_CLIENT_ENDPOINT'),
+    url=env.get('WEAVIATE_CLIENT_ENDPOINT'),
     additional_headers={
-        'X-OpenAI-Api-Key': utilities.env('OPENAI_API_KEY')
+        'X-OpenAI-Api-Key': env('OPENAI_API_KEY')
     }
 )
 
