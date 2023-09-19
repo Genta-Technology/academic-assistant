@@ -61,8 +61,9 @@ for message in st.session_state.messages[1:]:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
 
-if (len(st.session_state.messages) <= 8 and ("token" in st.session_state or st.session_state.token == "")) or \
-   (validate_openai_api_key(st.session_state.token) and "token" in st.session_state):
+if (len(st.session_state.messages) <= 8 
+    and ("token" in st.session_state or st.session_state.token == "")) \
+   or (validate_openai_api_key(st.session_state.token) and "token" in st.session_state):
     if prompt := st.chat_input("Wassup"):
         with st.chat_message("user"):
             st.markdown(prompt)
@@ -71,7 +72,8 @@ if (len(st.session_state.messages) <= 8 and ("token" in st.session_state or st.s
 
         response, docs = trigger_event(
             st.session_state.token
-            if ("token" in st.session_state and validate_openai_api_key(st.session_state.token))
+            if "token" in st.session_state \
+                and validate_openai_api_key(st.session_state.token)
             else env["OPENAI_API_KEY"]
         )
 
@@ -94,6 +96,7 @@ else:
         '<p style="font-size: 18px; font-weight:bold; color: #FF1D2E; margin-top: 15px;">'
         +
         "Limit exceeded, refresh the page to start a new conversation or insert your own" + \
-        " <a href='https://platform.openai.com/account/api-keys'>OpenAI API key</a> in the sidebar.</p>"
+        " <a href='https://platform.openai.com/account/api-keys'>OpenAI API key</a> " + \
+        "in the sidebar.</p>"
     )
     st.markdown(TEXT, unsafe_allow_html=True)
