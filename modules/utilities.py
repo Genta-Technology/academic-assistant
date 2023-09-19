@@ -129,7 +129,7 @@ class EnvironmentVariables:
         """
 
         return self.get(key)
-    
+
     def __getitem__(self, key: str) -> str:
         """
         Get an environment variable.
