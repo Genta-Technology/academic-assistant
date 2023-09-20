@@ -10,10 +10,23 @@ Args:
 import openai
 
 MODEL = "gpt-3.5-turbo"
-PRE_SEARCH = "Based on the recent question, your task is to give me an " + \
-             "appropriate query to search arxiv paper, or only response with " + \
-             "EMPTY If the question does not need a sources to answer. You should " + \
-             "not say more than query. You should not say any words except the query or EMPTY."
+# PRE_SEARCH = "Based on the recent question, your task is to give me an " + \
+#              "appropriate query to search arxiv paper, or only response with " + \
+#              "EMPTY If the question does not need a sources to answer. You should " + \
+#              "not say more than query. You should not say any words except the query or EMPTY."
+
+PRE_SEARCH_SYSTEM = "You are an expert in finding research papers on the internet. " + \
+                    "You are the master in creating perfect search queries. " + \
+                    "You will be given the previous chat between you and the user. " + \
+                    "Your task is to analyze the latest question and only provide an " + \
+                    "appropriate query to search research papers such as Google " + \
+                    "Scholar, Arxiv, and Semantic Scholars. Your response should be " + \
+                    "only the search query, and you should not say more than the query " + \
+                    "itself. If, based on your analysis of the previous chat, the latest " + \
+                    "question does not need a search query or is only a small talk chat, " + \
+                    "your response should be EMPTY. Once again, you should not say " + \
+                    "any words except the query or EMPTY!"
+
 
 def ask_gpt(token, messages, docs):
     """
@@ -47,10 +60,12 @@ def generate_search(token, messages):
     """
     # Auth Token
     openai.api_key = token
+
+    search_system = [{"role":"system", "content":PRE_SEARCH_SYSTEM}]
     output=openai.ChatCompletion.create(
         model=MODEL,
-        messages=search_prompt(messages),
-        temperature=0.6,
+        messages=search_system + messages[1:],
+        temperature=1.3,
         max_tokens=256,
         )
     output = output['choices'][0]['message']['content']
@@ -160,14 +175,14 @@ def abstract_to_string(abstract_dict):
             abstract_dict["dOI"],
             abstract_dict["date"])
 
-def search_prompt(messages):
-    """
-    generate a prompt for search querries
+# def search_prompt(messages):
+#     """
+#     generate a prompt for search querries
     
-    Args:
-    - messages (list)
-    """
-    main_question = messages[len(messages)-1]["content"]
-    return_question = "My question is: " + main_question +\
-                    PRE_SEARCH
-    return messages + [{"role": "user", "content":return_question}]
+#     Args:
+#     - messages (list)
+#     """
+#     main_question = messages[len(messages)-1]["content"]
+#     return_question = "My question is: " + main_question +\
+#                     PRE_SEARCH
+#     return messages + [{"role": "user", "content":return_question}]
