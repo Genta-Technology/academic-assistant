@@ -155,7 +155,7 @@ def search_semantics(querry, total=20):
     - total (int) (between 1-10, set default to 5) [optional]
     """
     url_search = "https://api.semanticscholar.org/graph/v1/paper" + \
-                 f"/search?query={querry.replace(' ', '+')}&limit=" + \
+                 f"/search?query={querry.replace(' ', '+').replace('-', ' ')}&limit=" + \
                  f"{total}&fields=abstract,authors,year,externalIds" + \
                  ",title,publicationDate"
 
