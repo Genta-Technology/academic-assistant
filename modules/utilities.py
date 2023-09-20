@@ -164,7 +164,7 @@ def search_semantics(querry, total=20):
     docs = []
     if result.status_code == 200:
         result = result.json()
-        for i in range(total):
+        for i in range(len(result["data"])):
             if "DOI" not in result["data"][i]['externalIds'] or \
                 result["data"][i]["abstract"] is None:
                 continue

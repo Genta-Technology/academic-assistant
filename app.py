@@ -23,7 +23,7 @@ TITLE = (
     '<span style="font-size = 40px;">GENTA</span> - Academic Assistant</H1>')
 
 st.markdown(TITLE, unsafe_allow_html=True)
-st.markdown("""Genta Acadmic Assistant is a tool to help you""" +
+st.markdown("""Genta Academic Assistant is a tool to help you""" +
             """ find the right research paper for your research.""")
 
 with st.sidebar:
