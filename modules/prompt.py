@@ -174,15 +174,3 @@ def abstract_to_string(abstract_dict):
             abstract_dict["authors"],
             abstract_dict["dOI"],
             abstract_dict["date"])
-
-# def search_prompt(messages):
-#     """
-#     generate a prompt for search querries
-    
-#     Args:
-#     - messages (list)
-#     """
-#     main_question = messages[len(messages)-1]["content"]
-#     return_question = "My question is: " + main_question +\
-#                     PRE_SEARCH
-#     return messages + [{"role": "user", "content":return_question}]
