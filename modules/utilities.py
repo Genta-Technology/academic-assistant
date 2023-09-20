@@ -3,12 +3,9 @@ A collection of utility functions.
 """
 
 import os
-import re
 import openai
 import weaviate
 import requests
-
-import streamlit as st
 
 from dotenv import load_dotenv, find_dotenv
 
