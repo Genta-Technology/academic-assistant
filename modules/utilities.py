@@ -3,9 +3,12 @@ A collection of utility functions.
 """
 
 import os
+import re
 import openai
 import weaviate
 import requests
+
+import streamlit as st
 
 from dotenv import load_dotenv, find_dotenv
 
@@ -154,8 +157,9 @@ def search_semantics(querry, total=20):
     - querry (str)
     - total (int) (between 1-10, set default to 5) [optional]
     """
+
     url_search = "https://api.semanticscholar.org/graph/v1/paper" + \
-                 f"/search?query={querry.replace(' ', '+').replace('-', ' ')}&limit=" + \
+                 f"/search?query={querry.replace(' ', '+')}&limit=" + \
                  f"{total}&fields=abstract,authors,year,externalIds" + \
                  ",title,publicationDate"
 
@@ -164,6 +168,11 @@ def search_semantics(querry, total=20):
     docs = []
     if result.status_code == 200:
         result = result.json()
+
+        # check if the result is empty
+        if 'data' not in result:
+            return docs
+        
         for i in range(len(result["data"])):
             if "DOI" not in result["data"][i]['externalIds'] or \
                 result["data"][i]["abstract"] is None:
