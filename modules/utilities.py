@@ -169,7 +169,7 @@ def search_semantics(querry, total=20):
         # check if the result is empty
         if 'data' not in result:
             return docs
-        
+
         for i in range(len(result["data"])):
             if "DOI" not in result["data"][i]['externalIds'] or \
                 result["data"][i]["abstract"] is None:
