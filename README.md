@@ -21,7 +21,7 @@
     <a href="https://github.com/Genta-Technology/Academic-Assistant"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/Genta-Technology/Academic-Assistant">View Demo</a>
+    <a href="https://academic.streamlit.app">View Demo</a>
     ·
     <a href="https://github.com/Genta-Technology/Academic-Assistant/issues">Report Bug</a>
     ·
